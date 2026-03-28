@@ -15,13 +15,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(''); // Clear error on new attempt
-    
+    setError(''); 
     try {
       await handleRegister(formData);
       navigate('/dashboard');
     } catch (err) {
-      // 2. BETTER ERROR HANDLING: Extract the message from the backend response
+      
       const serverMessage = err.response?.data?.message || "Registration failed.";
       setError(serverMessage);
     } finally {
@@ -42,7 +41,7 @@ const Register = () => {
 
         <form onSubmit={handleSubmit}>
 
-          {/* 3. NEW: USERNAME INPUT (Matches Backend) */}
+          
           <div className="input-group">
             <User size={18} />
             <input 
