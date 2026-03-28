@@ -1,0 +1,96 @@
+@import 'variables';
+
+.dashboard-page {
+  animation: fadeIn 0.5s ease-out;
+
+  .dashboard-header {
+    margin-bottom: 40px;
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      .sparkle { color: $accent-primary; }
+    }
+    p { color: $text-dim; margin-top: 8px; font-size: 1.1rem; }
+  }
+}
+
+.quicksave-container {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  padding: 30px;
+  border-radius: 24px;
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+
+  .input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid $border-color;
+    padding: 8px 8px 8px 20px;
+    border-radius: 16px;
+    gap: 15px;
+    
+    input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      &::placeholder { color: $text-muted; }
+    }
+
+    .add-btn {
+      background: $accent-primary;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba($accent-primary, 0.4); }
+    }
+  }
+
+  .divider { color: $text-muted; font-size: 0.75rem; font-weight: 800; }
+
+  .file-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border: 1px dashed $text-muted;
+    border-radius: 16px;
+    color: $text-dim;
+    cursor: pointer;
+    transition: $transition-smooth;
+    &:hover { border-color: $accent-primary; color: $text-bright; background: rgba($accent-primary, 0.05); }
+  }
+}
+
+.recent-section {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    .title { display: flex; align-items: center; gap: 10px; color: $text-bright; h2 { font-size: 1.25rem; } }
+    .text-btn { color: $accent-primary; font-weight: 600; font-size: 0.9rem; &:hover { text-decoration: underline; } }
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+}

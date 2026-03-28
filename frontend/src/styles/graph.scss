@@ -1,0 +1,43 @@
+@import 'variables';
+
+.graph-page {
+  width: 100%; // Ensure it's not restricted to a narrow width
+  height: 100vh;
+  background-color: #030303;
+  position: relative;
+  overflow: hidden;
+  display: flex; // Added to prevent weird spacing
+  
+  .neural-canvas {
+    width: 100%; // Force SVG to stretch
+    height: 100%;
+    display: block;
+    flex: 1;
+
+    .neural-path {
+      stroke: rgba(59, 130, 246, 0.15); // Slightly brighter for visibility
+      stroke-width: 1;
+      stroke-dasharray: 5, 5;
+    }
+
+    .node-group {
+      // YouTube Red Glow - specifically for the red nodes in your 2nd photo
+      &.youtube .node-orb {
+        filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.8));
+      }
+      
+      .node-orb {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .node-label {
+        fill: #ffffff; // Brighter for dark background
+        font-size: 10px;
+        font-weight: 400;
+        pointer-events: none;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      }
+    }
+  }
+}

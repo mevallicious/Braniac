@@ -1,0 +1,98 @@
+@import 'variables';
+
+.auth-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // Dark radial glow for background
+  background: radial-gradient(circle at center, rgba($accent-primary, 0.08), $bg-main 70%);
+
+  .auth-card {
+    background: $bg-card;
+    border: 1px solid $border-color;
+    padding: 48px;
+    border-radius: 32px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUpFade 0.6s ease-out;
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 40px;
+      .auth-logo { color: $accent-primary; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba($accent-primary, 0.4)); }
+      h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+      p { color: $text-dim; font-size: 1rem; }
+    }
+
+    .auth-error {
+      background: rgba(#ef4444, 0.1);
+      color: #ef4444;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+      border: 1px solid rgba(#ef4444, 0.2);
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid $border-color;
+      border-radius: 16px;
+      padding: 0 16px;
+      margin-bottom: 16px;
+      transition: $transition-smooth;
+
+      &:focus-within { border-color: $accent-primary; background: rgba($accent-primary, 0.02); }
+
+      svg { color: $text-muted; }
+      input {
+        flex: 1;
+        padding: 16px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        outline: none;
+        &::placeholder { color: $text-muted; }
+      }
+    }
+
+    .auth-btn {
+      width: 100%;
+      background: $accent-primary;
+      color: white;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 32px;
+      box-shadow: 0 10px 20px rgba($accent-primary, 0.2);
+
+      &:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 15px 30px rgba($accent-primary, 0.3); }
+      &:disabled { opacity: 0.6; cursor: not-allowed; }
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 32px;
+      color: $text-dim;
+      font-size: 0.9rem;
+      a { color: $accent-primary; font-weight: 600; &:hover { text-decoration: underline; } }
+    }
+  }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,17 @@
+// --- THE BLOOD PROTOCOL PALETTE ---
+$bg-main: #050505;         // Carbon Black
+$bg-card: #0c0c0c;         // Deep Charcoal
+$border-color: rgba(255, 46, 46, 0.1); // Subtle Red-tinted borders
+
+$accent-primary: #ff2e2e;  // Electric Red (Neural Firing)
+$accent-void: #94a3b8;     // Steel Slate (Cold Logic)
+$accent-success: #f8fafc;  // Ghost White (Pure Data)
+
+$text-bright: #ffffff;
+$text-dim: #94a3b8;
+$text-muted: #475569;
+
+// Effects
+$glass-bg: rgba(255, 46, 46, 0.02); 
+$glass-blur: blur(16px);
+$transition-smooth: all 0.3s cubic-bezier(0.2, 1, 0.2, 1);

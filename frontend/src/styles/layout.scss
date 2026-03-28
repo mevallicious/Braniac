@@ -1,0 +1,28 @@
+@import 'variables';
+
+.layout-root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: $bg-main;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+  // Subtle radial glow in the background
+  background: radial-gradient(
+    circle at 50% -20%, 
+    rgba($accent-primary, 0.05), 
+    transparent 70%
+  );
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px;
+
+}

@@ -1,0 +1,56 @@
+@import 'variables';
+@import 'layout';
+@import 'sidebar';
+@import 'dashboard';
+@import 'search';
+@import 'library';
+@import 'graph';
+@import 'chat';
+@import 'memoryDetail'; 
+@import 'auth';
+@import 'components';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none; // Kills the underlines globally
+}
+
+
+body {
+  background-color: $bg-main;
+  color: $text-bright;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit; // Makes links follow your component colors
+  text-decoration: none;
+}
+
+// Fix for that "Invisible" text in your screenshot
+h1, h2, h3, p, span {
+  color: #ffffff; 
+}
+
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  transition: $transition-smooth;
+}
+
+// Custom scrollbar for that "Better than reference" look
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: $border-color;
+  border-radius: 10px;
+  &:hover { background: $text-muted; }
+}

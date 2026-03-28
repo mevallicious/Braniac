@@ -1,0 +1,100 @@
+@import 'variables';
+
+.library-page {
+  animation: fadeIn 0.4s ease-out;
+
+  .library-header {
+    margin-bottom: 40px;
+    
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      .header-icon { color: $accent-primary; }
+      h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: $bg-card;
+      padding: 12px 20px;
+      border-radius: 16px;
+      border: 1px solid $border-color;
+      width: fit-content;
+
+      .filter-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $text-muted;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .filter-pills {
+        display: flex;
+        gap: 10px;
+
+        .filter-pill {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: $text-dim;
+          border: 1px solid transparent;
+          transition: $transition-smooth;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+          }
+
+          &.active {
+            background: rgba($accent-primary, 0.1);
+            color: $accent-primary;
+            border-color: rgba($accent-primary, 0.3);
+          }
+        }
+      }
+    }
+  }
+}
+
+.library-loading, .library-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: $text-muted;
+  gap: 20px;
+
+  .loader-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba($accent-primary, 0.1);
+    border-top: 3px solid $accent-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  strong { color: $accent-primary; }
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
