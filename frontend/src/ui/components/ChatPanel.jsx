@@ -25,7 +25,7 @@ const ChatPanel = ({ memoryId, onClose }) => {
       <header className="chat-header">
         <div className="header-info">
           <Sparkles size={16} className="glow-icon" />
-          <h3>Neural Link</h3>
+          <h3>Brainy AI</h3>
         </div>
         {onClose && (
           <button className="close-btn" onClick={onClose}>
@@ -40,7 +40,7 @@ const ChatPanel = ({ memoryId, onClose }) => {
         <div className="message-wrapper ai greeting">
           <div className="avatar"><Bot size={12} /></div>
           <div className="message-bubble">
-            Hey! I'm <strong>Brainy</strong>. 🧠 I've indexed this node into your vault. If you have any questions related to the file, just ask me!
+            Hey! I'm <strong>Brainy</strong>. I've indexed this node into your vault. If you have any questions related to the file, just ask me!
           </div>
         </div>
 

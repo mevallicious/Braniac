@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FolderGit2, Sparkles, Loader2, BrainCircuit, ChevronRight, Layers } from 'lucide-react';
-import { useMemories } from '../../hooks/useMemories'; // 🎯 Use the Hook
+import { useMemories } from '../../hooks/useMemories';
 import { useNavigate } from 'react-router-dom';
 
 const Collections = () => {

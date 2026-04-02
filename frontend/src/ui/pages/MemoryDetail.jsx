@@ -118,14 +118,13 @@ const MemoryDetail = () => {
         </footer>
       </div>
 
-      {/* 🎯 UPDATED CHAT SECTION: SPLIT IN HALF */}
       <div className="chat-section">
         
         {/* TOP HALF: RECOMMENDATIONS */}
         <div className="recommendations-area">
           <div className="rec-header">
             <Sparkles size={16} color="#ff2e2e" />
-            <span>Neural Path Recommendations</span>
+            <span>Similar Recommendations</span>
           </div>
           
           <div className="rec-list">
@@ -144,7 +143,7 @@ const MemoryDetail = () => {
               ))
             ) : (
               <div className="rec-empty">
-                <p>Analyzing node for similar pathways...</p>
+                <p>Analyzing node for similar videos.</p>
               </div>
             )}
           </div>
