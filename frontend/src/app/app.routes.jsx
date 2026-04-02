@@ -11,6 +11,7 @@ import Library from '../ui/pages/Library';
 import Search from '../ui/pages/Search';
 import KnowledgeGraph from '../ui/pages/KnowledgeGraph';
 import MemoryDetail from '../ui/pages/MemoryDetail';
+import Collections from '../ui/pages/Collections';
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/graph" element={<KnowledgeGraph />} />
           <Route path="/memory/:id" element={<MemoryDetail />} />
+          <Route path="/collections" element={<Collections />} />
         </Route>
       </Route>
 

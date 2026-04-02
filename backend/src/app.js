@@ -11,7 +11,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
-  origin: 'https://braniac-66vs.onrender.com', 
+  origin: [
+    'http://localhost:5173',                   
+    'https://your-frontend-url.onrender.com'   
+  ],
   credentials: true, 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']

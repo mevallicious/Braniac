@@ -42,3 +42,8 @@ export const saveNote = async (content) => {
     });
     return response.data;
 };
+
+export const getClusters = async () => {
+    const response = await api.get("/brain/clusters");
+    return response.data;
+};

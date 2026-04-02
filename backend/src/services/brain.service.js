@@ -185,3 +185,58 @@ export const chatWithBrain = async (query, userId, memoryId = null) => {
     throw error;
   }
 };
+
+
+export const generateClusters = async (userId) => {
+  try {
+    console.log("🧠 Braniac: Analyzing neural pathways for clusters...");
+
+    //  Fetch the user's memories (limit to 50 so we don't overwhelm the AI prompt)
+    const memories = await Memory.find({ userId }).limit(50).lean();
+
+    if (memories.length === 0) {
+      return [];
+    }
+
+    // Format the data compactly to save tokens
+    const memoryList = memories.map(m => 
+      `ID: ${m._id} | Type: ${m.type} | Summary: ${m.summary}`
+    ).join('\n');
+
+
+    const prompt = `
+      You are an expert Ontologist AI. I will give you a list of saved memories/notes. 
+      Your job is to analyze them and group them into 3 to 6 broad, intuitive categories (clusters) based on their semantic meaning.
+
+      Return ONLY a raw, valid JSON array. Do not include markdown tags like \`\`\`json. 
+      Format exactly like this:
+      [
+        {
+          "topic": "Frontend Development",
+          "description": "Notes related to React, CSS, and web UI.",
+          "memoryIds": ["65abc123...", "65def456..."]
+        }
+      ]
+
+      HERE ARE THE MEMORIES:
+      ${memoryList}
+    `;
+
+    //  Generate the response
+    const result = await model.generateContent(prompt);
+    let aiResponse = result.response.text();
+
+    // Clean the response (Gemini sometimes adds markdown even if told not to)
+    aiResponse = aiResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+
+    //  Parse and return
+    const clusters = JSON.parse(aiResponse);
+    console.log(`✅ Braniac created ${clusters.length} knowledge clusters.`);
+    
+    return clusters;
+
+  } catch (error) {
+    console.error("❌ Clustering Failed:", error.message);
+    throw new Error("Could not map neural pathways.");
+  }
+};

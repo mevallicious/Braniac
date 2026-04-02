@@ -3,6 +3,7 @@ import imagekit from '../utils/imagekit.js';
 import { parseFile } from '../utils/fileParser.js';
 import { Memory } from '../models/memory.model.js';
 import { getLinkMetadata } from '../utils/urlParser.js';
+import { generateClusters } from '../services/brain.service.js'; 
 
 export const uploadFile = async (req, res) => {
     try {
@@ -187,5 +188,24 @@ export const saveLink = async (req, res) => {
   } catch (error) {
     console.error("❌ Link Save Failed:", error.message);
     res.status(500).json({ error: "Could not save link", details: error.message });
+  }
+};
+
+
+/**
+ * GET /api/v1/brain/clusters
+ */
+export const getKnowledgeMap = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const clusters = await generateClusters(userId);
+    
+    res.status(200).json({
+      message: "Knowledge map generated.",
+      clusters
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Mapping failed", details: error.message });
   }
 };

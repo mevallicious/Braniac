@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { saveContent, searchContent, brainChat , getHistory , deleteMemory , uploadFile ,saveLink} from '../controllers/brain.controller.js';
 import { protect } from '../middleware/auth.middleware.js'; 
+import { getKnowledgeMap } from '../controllers/brain.controller.js';
 const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
@@ -14,6 +15,8 @@ router.post('/save', protect, saveContent);
 router.get('/history', protect, getHistory); 
 router.get('/search', protect, searchContent);
 router.post('/chat/:id', protect, brainChat);
+
+router.get('/clusters', protect, getKnowledgeMap);
 
 router.delete('/:id', protect, deleteMemory);
 

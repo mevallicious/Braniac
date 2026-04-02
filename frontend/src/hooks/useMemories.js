@@ -1,12 +1,12 @@
 import { useContext, useCallback } from 'react';
 import { BrainContext } from '../state/BrainContext';
-// 🚨 Direct imports from your individual API exports
-import {getHistory, saveLink, searchMemories, uploadFile, deleteMemory ,saveNote } from '../api/brain.api';
+import {getHistory, saveLink, searchMemories, uploadFile, deleteMemory ,saveNote ,getClusters } from '../api/brain.api';
 
 export const useMemories = () => {
     const { 
         memories, setMemories, 
         searchResults, setSearchResults,
+        clusters, setClusters,
         isFetching, setIsFetching, 
         setBrainError 
     } = useContext(BrainContext);
@@ -96,15 +96,46 @@ export const useMemories = () => {
         }
     };
 
+    const generateKnowledgeMap = async () => {
+        setIsFetching(true);
+        setBrainError(null);
+        try {
+            const data = await getClusters();
+
+            // Hunt down the array no matter how deeply nested it is
+            let arrayToSave = [];
+            if (Array.isArray(data)) {
+                arrayToSave = data;
+            } else if (data && Array.isArray(data.clusters)) {
+                arrayToSave = data.clusters;
+            } else if (data?.data && Array.isArray(data.data.clusters)) {
+                arrayToSave = data.data.clusters;
+            }
+            
+            setClusters(arrayToSave);
+            
+            return arrayToSave;
+
+        } catch (err) {
+            console.error("Mapping failed:", err);
+            setBrainError("Braniac couldn't map your clusters right now. Try again.");
+            throw err;
+        } finally {
+            setIsFetching(false);
+        }
+    };
+
     return { 
         memories, 
         searchResults, 
+        clusters,
         isFetching, 
         fetchHistory, 
         archiveLink, 
         archiveFile, 
         search, 
         forget,
-        archiveNote
+        archiveNote,
+        generateKnowledgeMap
     };
 };

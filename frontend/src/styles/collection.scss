@@ -1,0 +1,183 @@
+// Make sure your main.scss imports variables.scss BEFORE this file!
+
+.collections-page {
+  // --- 1. HERO & BUTTON FIX ---
+  .mapping-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+
+    .btn-map {
+      background: $accent-primary; // 🩸 Electric Red
+      color: $text-bright;
+      border: 1px solid transparent;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: $transition-smooth; // Uses your custom bezier curve
+
+      &:hover:not(:disabled) {
+        background: transparent;
+        border-color: $accent-primary;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(255, 46, 46, 0.3); // Neural glow
+      }
+
+      &:disabled {
+        background: $bg-card;
+        border-color: $border-color;
+        color: $text-muted;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+
+      .spinner {
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  // --- 2. TEXT STATES ---
+  .error-text {
+    color: $accent-primary;
+    font-weight: 500;
+    margin-top: 10px;
+  }
+
+  .loading-subtext {
+    font-size: 0.85rem;
+    color: $text-muted;
+    display: block;
+    margin-top: 12px;
+  }
+
+  // --- 3. CLUSTERS GRID ---
+  .clusters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 24px 0;
+    width: 100%;
+
+    .cluster-folder {
+      background: $bg-card; // Deep Charcoal
+      border: 1px solid $border-color;
+      border-radius: 16px;
+      padding: 24px;
+      transition: $transition-smooth;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+
+      // Hover Animation
+      &:hover {
+        transform: translateY(-4px);
+        border-color: $accent-primary;
+        box-shadow: 0 12px 24px rgba(255, 46, 46, 0.15); // Subtle red underglow
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      // 🩸 Aggressive top border scanning effect
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, $accent-primary, transparent);
+        opacity: 0;
+        transition: $transition-smooth;
+      }
+
+      // --- Folder Interior Elements ---
+      .folder-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .folder-icon-wrapper {
+          background: $glass-bg;
+          border: 1px solid $border-color;
+          padding: 12px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: $glass-blur; // Uses your glass effect!
+          
+          svg {
+            color: $accent-primary; // Make the folder icon electric red
+          }
+        }
+
+        .node-count {
+          font-size: 0.75rem;
+          font-weight: 600;
+          background: $bg-main;
+          color: $accent-void;
+          padding: 6px 12px;
+          border-radius: 20px;
+          border: 1px solid $border-color;
+        }
+      }
+
+      .folder-title {
+        color: $text-bright;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+      }
+
+      .folder-desc {
+        color: $text-dim;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0 0 24px 0;
+        flex-grow: 1; // Pushes the button to the bottom
+      }
+
+      .open-folder-btn {
+        background: transparent;
+        border: none;
+        color: $accent-primary;
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0;
+        cursor: pointer;
+        transition: gap 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+        margin-top: auto;
+
+        &:hover {
+          gap: 12px; // Beautiful sliding arrow effect
+          color: $text-bright;
+          text-shadow: 0 0 8px rgba(255, 46, 46, 0.8); // Glowing text on hover
+        }
+      }
+    }
+  }
+}
+
+// --- 4. KEYFRAMES ---
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

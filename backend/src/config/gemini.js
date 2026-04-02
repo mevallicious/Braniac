@@ -4,7 +4,7 @@ import { GoogleGenerativeAI, TaskType } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const model = genAI.getGenerativeModel({ 
-  model: "gemini-2.5-flash-lite" 
+  model: "gemini-flash-lite-latest" 
 });
 
 export const embeddingModel = genAI.getGenerativeModel({ 

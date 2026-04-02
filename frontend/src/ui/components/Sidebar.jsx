@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  LayoutDashboard, Library, Search, Share2, 
+  LayoutDashboard, Library, Search, Layers,Share2, 
   LogOut, BrainCircuit, Zap, Activity 
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -38,6 +38,7 @@ const Sidebar = () => {
     { name: 'Library', path: '/library', icon: <Library size={20} /> },
     { name: 'Search', path: '/search', icon: <Search size={20} /> },
     { name: 'Knowledge Map', path: '/graph', icon: <Share2 size={20} /> },
+    { name: 'Collections', path: '/collections', icon: <Layers size={20} /> }
   ];
 
   return (

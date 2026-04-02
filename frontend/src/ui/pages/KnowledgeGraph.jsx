@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { useMemories } from '../../hooks/useMemories';
-import ChatPanel from '../components/ChatPanel';
-import { Share2, Target, Activity } from 'lucide-react';
+import { Share2, Target, Activity, X, Tag, FileImage, Video, FileText, Link as LinkIcon } from 'lucide-react';
 
 const KnowledgeGraph = () => {
   const svgRef = useRef();
-  const containerRef = useRef(); // New ref for the parent div
+  const containerRef = useRef(); 
   const { memories } = useMemories();
   const [selectedNode, setSelectedNode] = useState(null);
 
@@ -23,10 +22,31 @@ const KnowledgeGraph = () => {
     }
   };
 
+  // 🎯 SMART THUMBNAIL EXTRACTOR (BULLETPROOF)
+  const getThumbnailUrl = (node) => {
+    // 1. Combine everything into one string to ensure we don't miss the link
+    const stringToSearch = `${node.content || ''} ${node.fileUrl || ''}`;
+
+    // 2. Check for YouTube IDs
+    if (node.type === 'youtube' || stringToSearch.includes('youtu')) {
+      const match = stringToSearch.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      if (match && match[1]) {
+         return `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`;
+      }
+    }
+    
+    // 3. ONLY return fileUrl if this node is explicitly an image
+    if (node.type === 'image' && node.fileUrl) {
+      return node.fileUrl;
+    }
+
+    // 4. No valid image found, fallback to sleek icons
+    return null;
+  };
+
   useEffect(() => {
     if (!memories.length) return;
 
-    // --- 🛠️ DYNAMIC DIMENSIONS ---
     const updateDimensions = () => {
       const width = containerRef.current.clientWidth;
       const height = containerRef.current.clientHeight;
@@ -52,14 +72,13 @@ const KnowledgeGraph = () => {
       }
     }
 
-    // --- 🧠 TUNED FORCE SIMULATION ---
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(200)) // Increased distance
-      .force("charge", d3.forceManyBody().strength(-800)) // Stronger repulsion to fill gaps
-      .force("center", d3.forceCenter(width / 2, height / 2)) // Force center to actual middle
+      .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+      .force("charge", d3.forceManyBody().strength(-800)) 
+      .force("center", d3.forceCenter(width / 2, height / 2)) 
       .force("collision", d3.forceCollide().radius(70))
-      .force("x", d3.forceX(width / 2).strength(0.1)) // Gently pull to horizontal center
-      .force("y", d3.forceY(height / 2).strength(0.1)); // Gently pull to vertical center
+      .force("x", d3.forceX(width / 2).strength(0.1)) 
+      .force("y", d3.forceY(height / 2).strength(0.1)); 
 
     const link = svg.append("g")
       .selectAll("line")
@@ -98,7 +117,6 @@ const KnowledgeGraph = () => {
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
-    // --- 🔄 RESIZE HANDLER ---
     const handleResize = () => {
       const { width: newWidth, height: newHeight } = updateDimensions();
       svg.attr("width", newWidth).attr("height", newHeight).attr("viewBox", [0, 0, newWidth, newHeight]);
@@ -117,27 +135,87 @@ const KnowledgeGraph = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [memories]);
 
+  // Derived state for the image URL
+  const activeThumbnail = selectedNode ? getThumbnailUrl(selectedNode) : null;
+
   return (
     <div className="page-container full-screen">
-        <div className="graph-page" ref={containerRef}>
-      <div className="graph-controls">
-        <div className="control-badge active">
-          <Share2 size={14} /> <span>{memories.length} Nodes Mapped</span>
+      <div className="graph-page" ref={containerRef}>
+        
+        {/* GRAPH HUD */}
+        <div className="graph-controls">
+          <div className="control-badge active">
+            <Share2 size={14} /> <span>{memories.length} Nodes Mapped</span>
+          </div>
+          <div className="control-hint">
+            <Activity size={14} /> <span>Neural link active</span>
+          </div>
         </div>
-        <div className="control-hint">
-          <Activity size={14} /> <span>Neural link active</span>
-        </div>
+
+        <svg ref={svgRef} className="neural-canvas"></svg>
+
+        {/* 🎯 THE NODE POPUP OVERLAY */}
+        {selectedNode && (
+          <div className="node-modal-overlay" onClick={() => setSelectedNode(null)}>
+            <div className="node-modal" onClick={(e) => e.stopPropagation()}>
+              
+              <button className="close-modal-btn" onClick={() => setSelectedNode(null)}>
+                <X size={20} />
+              </button>
+
+              <div className="modal-header">
+                <span className="node-type-badge" style={{ color: getTypeColor(selectedNode.type), borderColor: getTypeColor(selectedNode.type) }}>
+                  {selectedNode.type.toUpperCase()} NODE
+                </span>
+              </div>
+
+              {/* 🎯 SMART IMAGE RENDERER */}
+              {activeThumbnail ? (
+                <div className="modal-image-container">
+                  <img src={activeThumbnail} alt="Node content" />
+                </div>
+              ) : (
+                <div className="modal-no-image">
+                  {selectedNode.type === 'youtube' ? <Video size={32} opacity={0.3} color="#ef4444" /> :
+                   selectedNode.type === 'pdf' ? <FileText size={32} opacity={0.3} color="#8b5cf6" /> :
+                   selectedNode.type === 'link' ? <LinkIcon size={32} opacity={0.3} color="#06b6d4" /> :
+                   <FileImage size={32} opacity={0.3} color="#10b981" />}
+                </div>
+              )}
+
+              {/* CONTENT */}
+              <div className="modal-body">
+                <p style={{ wordBreak: 'break-word' }}>
+                  {selectedNode.content?.startsWith('http') ? (
+                    <a href={selectedNode.content} target="_blank" rel="noopener noreferrer" style={{ color: '#ff2e2e', textDecoration: 'underline' }}>
+                      {selectedNode.content}
+                    </a>
+                  ) : (
+                    selectedNode.content
+                  )}
+                </p>
+                {selectedNode.summary && (
+                  <div className="modal-summary">
+                    <strong>AI Summary:</strong> {selectedNode.summary}
+                  </div>
+                )}
+              </div>
+
+              {/* TAGS */}
+              <div className="modal-footer">
+                <Tag size={16} color="#ff2e2e" />
+                <div className="tags-container">
+                  {selectedNode.tags?.map(tag => (
+                    <span key={tag} className="node-tag">#{tag}</span>
+                  )) || <span className="node-tag">#untagged</span>}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
       </div>
-
-      <svg ref={svgRef} className="neural-canvas"></svg>
-
-      {selectedNode && (
-        <ChatPanel 
-          memoryId={selectedNode._id} 
-          onClose={() => setSelectedNode(null)} 
-        />
-      )}
-    </div>
     </div>
   );
 };
