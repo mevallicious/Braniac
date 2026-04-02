@@ -4,6 +4,7 @@ import { parseFile } from '../utils/fileParser.js';
 import { Memory } from '../models/memory.model.js';
 import { getLinkMetadata } from '../utils/urlParser.js';
 import { generateClusters } from '../services/brain.service.js'; 
+import { getSmartSuggestions } from '../services/youtube.service.js';
 
 export const uploadFile = async (req, res) => {
     try {
@@ -163,21 +164,34 @@ export const saveLink = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    // 1. Scrape metadata using your updated urlParser
+    // 1. Scrape metadata using your urlParser
     const metadata = await getLinkMetadata(url);
     
+    // 🎯 NEW: YouTube Suggestion Discovery
+    let suggestions = [];
+    if (metadata.type === "youtube") {
+      // Regex to extract the 11-character Video ID
+      const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+      
+      if (videoId) {
+        console.log(`🧠 Braniac: Analyzing YouTube Node ${videoId} for learning paths...`);
+        suggestions = await getSmartSuggestions(videoId);
+      }
+    }
+
     // 2. Format content for Gemini
-    // We prioritize the Title + Description for better AI indexing
     const contentToArchive = metadata.title 
       ? `Title: ${metadata.title}\nDescription: ${metadata.description}`
       : `Source URL: ${url}`;
 
     // 3. INDEX IT
+    // We pass the suggestions array as the 5th argument
     const result = await processAndArchive(
       contentToArchive, 
-      metadata.type || "link", //  FIX: Use the type from scraper (youtube, tweet, audio, etc.)
+      metadata.type || "link", 
       userId, 
-      url 
+      url,
+      suggestions // 🎯 PASSING SUGGESTIONS TO THE DATABASE LOGIC
     );
 
     res.status(200).json({ 

@@ -9,6 +9,9 @@ const memorySchema = new mongoose.Schema({
   tags: [String],
   type: { type: String, default: 'text' },
   fileUrl: { type: String }, 
+  metadata: {
+    suggestions: { type: Array, default: [] }
+  },
   isFavorite: { type: Boolean, default: false }
 }, { timestamps: true });
 

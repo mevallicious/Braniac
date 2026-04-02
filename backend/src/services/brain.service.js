@@ -6,7 +6,7 @@ import { Chat } from "../models/chat.model.js";
 /**
  * Saves memory to MongoDB and a private Pinecone namespace
  */
-export const processAndArchive = async (content, type, userId, fileUrl = null) => {
+export const processAndArchive = async (content, type, userId, fileUrl = null ,suggestions = []) => {
   try {
     // 1. Content Guard: Never let the AI see an empty string
     const safeContent = (content && content.trim().length > 0) 
@@ -34,7 +34,10 @@ export const processAndArchive = async (content, type, userId, fileUrl = null) =
       tags: metadata?.tags || ["unsorted"],
       type,
       pineconeId,
-      fileUrl
+      fileUrl,
+      metadata: { 
+        suggestions: suggestions 
+      }
     });
 
     
