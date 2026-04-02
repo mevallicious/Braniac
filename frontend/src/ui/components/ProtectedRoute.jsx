@@ -11,8 +11,11 @@ const ProtectedRoute = () => {
   if (isLoading) {
     return (
       <div className="auth-loading-screen">
-        <Loader2 className="spinner" size={40} />
-        <p>Verifying Neural Signature...</p>
+        <div className="loading-wrapper">
+          <div className="pulse-ring"></div>
+          <Loader2 className="spinner" size={40} />
+        </div>
+        <p>Verifying Neural Signature</p>
       </div>
     );
   }

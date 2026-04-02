@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, ExternalLink, Video, 
-  Image as ImageIcon, FileText, StickyNote, Info
+  Image as ImageIcon, FileText, StickyNote, Info, Sparkles, PlayCircle
 } from 'lucide-react';
 import { useMemories } from '../../hooks/useMemories';
 import ChatPanel from '../components/ChatPanel';
@@ -10,24 +10,15 @@ import ChatPanel from '../components/ChatPanel';
 const MemoryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  // 🎯 THE FIX: Bring in searchResults as well
   const { memories, searchResults } = useMemories();
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    // 1. Look in the Library (History) first
     let found = memories?.find(m => String(m._id) === String(id));
-
-    // 2. If not found in Library, look in Search Results
     if (!found && searchResults?.length > 0) {
       found = searchResults.find(m => String(m._id) === String(id));
     }
-
-    // 3. Set the item if we found it in either place!
-    if (found) {
-      setItem(found);
-    }
+    if (found) setItem(found);
   }, [id, memories, searchResults]);
 
   const getYoutubeId = (url) => {
@@ -44,10 +35,10 @@ const MemoryDetail = () => {
     </div>
   );
 
-  // Safely extract data whether it came from Mongo directly or via Pinecone metadata
   const fileUrl = item.fileUrl || item.metadata?.fileUrl;
   const type = item.type || item.metadata?.type || 'link';
   const rawContent = item.content || item.metadata?.originalContent || "";
+  const suggestions = item.metadata?.suggestions || []; // 🎯 Grab suggestions from metadata
 
   const videoId = getYoutubeId(fileUrl);
   const isYoutube = type === 'youtube' || (type === 'link' && videoId);
@@ -102,9 +93,7 @@ const MemoryDetail = () => {
                     <p>Node Hash: {String(item._id || item.id).substring(0, 12)}</p>
                   </div>
                 </div>
-                <div className="doc-content-scroll">
-                  {displayTitle}
-                </div>
+                <div className="doc-content-scroll">{displayTitle}</div>
               </div>
             </div>
           )}
@@ -129,8 +118,42 @@ const MemoryDetail = () => {
         </footer>
       </div>
 
+      {/* 🎯 UPDATED CHAT SECTION: SPLIT IN HALF */}
       <div className="chat-section">
-        <ChatPanel memoryId={id} title={displayTitle} />
+        
+        {/* TOP HALF: RECOMMENDATIONS */}
+        <div className="recommendations-area">
+          <div className="rec-header">
+            <Sparkles size={16} color="#ff2e2e" />
+            <span>Neural Path Recommendations</span>
+          </div>
+          
+          <div className="rec-list">
+            {suggestions.length > 0 ? (
+              suggestions.map((s, idx) => (
+                <a key={idx} href={s.url} target="_blank" rel="noreferrer" className="rec-card">
+                  <div className="rec-thumb">
+                    <img src={s.thumbnail} alt={s.title} />
+                    <div className="play-overlay"><PlayCircle size={20} /></div>
+                  </div>
+                  <div className="rec-info">
+                    <span className="rec-type">{s.type === 'same_channel' ? 'From Channel' : 'Related Topic'}</span>
+                    <p className="rec-title">{s.title}</p>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <div className="rec-empty">
+                <p>Analyzing node for similar pathways...</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* BOTTOM HALF: CHAT */}
+        <div className="chat-area">
+          <ChatPanel memoryId={id} title={displayTitle} />
+        </div>
       </div>
     </div>
   );

@@ -3,144 +3,193 @@
 .sidebar {
   width: 260px;
   height: 100vh;
-  background: #050505;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: $bg-main; // Carbon Black
+  border-right: 1px solid $border-color;
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
   position: sticky;
   top: 0;
   z-index: 100;
+  
+  // --- 1. THE NEURAL SCROLLBAR ---
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  .nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    color: #9ca3af !important; 
-    transition: all 0.2s ease;
+  &::-webkit-scrollbar {
+    width: 4px; // Thin and discrete
+  }
 
-    &.active {
-      background: rgba(246, 59, 59, 0.15); 
-      color: #f63b3b !important;
-      font-weight: 600;
-    }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-    &:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.05);
-      color: #ffffff !important;
+  &::-webkit-scrollbar-thumb {
+    background: rgba($accent-primary, 0.15); // Faint red
+    border-radius: 10px;
+    transition: $transition-smooth;
+
+    &:hover {
+      background: $accent-primary; // Lights up on interaction
+      box-shadow: 0 0 10px $accent-primary;
     }
   }
 
+  // --- 2. BRAND SECTION ---
   .sidebar-brand {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 0 12px;
     margin-bottom: 40px;
+    flex-shrink: 0; // Prevents squishing
 
     .brand-icon { 
       color: $accent-primary; 
-      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5)); 
+      filter: drop-shadow(0 0 8px rgba(255, 46, 46, 0.6)); 
+      animation: pulseOpacity 3s infinite;
     }
+    
     .brand-name { 
-      font-size: 1.4rem; 
+      font-size: 1.5rem; 
       font-weight: 900; 
-      color: white; 
-      letter-spacing: -0.8px; 
+      color: $text-bright; 
+      letter-spacing: -1px; 
+      text-transform: lowercase; // Minimalist aesthetic
     }
   }
 
+  // --- 3. NAVIGATION LINKS ---
   .sidebar-nav {
-    flex: 1;
+    flex: 1; // Pushes the footer to the bottom
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 
     .nav-link {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
-      border-radius: 12px;
-      color: #888;
-      font-weight: 500;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 10px;
+      color: $text-dim !important;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: $transition-smooth;
 
-      &:hover {
+      svg {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover:not(.active) {
         background: rgba(255, 255, 255, 0.03);
-        color: white;
+        color: $text-bright !important;
+        
+        svg {
+          transform: translateX(2px);
+          color: $accent-primary;
+        }
       }
 
       &.active {
-        background: rgba($accent-primary, 0.1);
-        color: $accent-primary;
-        box-shadow: inset 3px 0 0 $accent-primary;
+        background: rgba($accent-primary, 0.08);
+        color: $accent-primary !important;
+        border-left: 3px solid $accent-primary;
+        padding-left: 13px; // Adjusts for the border width
+        
+        svg {
+          filter: drop-shadow(0 0 5px $accent-primary);
+        }
       }
     }
   }
 
+  // --- 4. THE VOID (QUICK CAPTURE) ---
   .the-void {
     margin: 24px 0;
     padding: 16px;
-    background: rgba($accent-void, 0.03);
-    border: 1px solid rgba($accent-void, 0.1);
+    background: $bg-card; // Deep Charcoal
+    border: 1px solid $border-color;
     border-radius: 16px;
-    transition: all 0.3s ease;
+    transition: $transition-smooth;
+    flex-shrink: 0; // Won't collapse on scroll
 
     &:focus-within {
-      border-color: rgba($accent-void, 0.4);
-      background: rgba($accent-void, 0.06);
+      border-color: rgba($accent-primary, 0.4);
+      background: rgba($accent-primary, 0.02);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    &.syncing {
+      border-color: $accent-primary;
+      animation: pulseBorder 1.5s infinite;
     }
 
     .void-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.7rem;
-      font-weight: 800;
+      font-size: 0.65rem;
+      font-weight: 900;
       color: $accent-void;
       margin-bottom: 12px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
+
+      .pulse-icon {
+        color: $accent-primary;
+        animation: spin 1s linear infinite;
+      }
     }
 
     textarea {
       width: 100%;
       background: transparent;
       border: none;
-      color: #eee;
+      color: $text-bright;
       font-size: 0.9rem;
       resize: none;
       height: 70px;
       outline: none;
-      line-height: 1.4;
-      &::placeholder { color: #444; }
+      line-height: 1.5;
+      font-family: inherit;
+      
+      &::placeholder { color: $text-muted; }
+      &:disabled { opacity: 0.5; }
     }
 
     .void-hint { 
-      font-size: 0.65rem; 
-      color: #444; 
+      font-size: 0.6rem; 
+      color: $text-muted; 
       margin-top: 10px;
-      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   }
 
+  // --- 5. FOOTER & STATS ---
   .sidebar-footer {
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 24px;
+    border-top: 1px solid $border-color;
+    flex-shrink: 0;
 
     .neural-stats {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      
       .stat-item {
         display: flex;
         align-items: center;
-        gap: 8px;
-        color: $accent-success;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 0.2px;
+        gap: 10px;
+        color: $accent-success; // Ghost White
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        
+        .stat-icon {
+          color: $accent-primary;
+          animation: pulseOpacity 2s infinite;
+        }
       }
     }
 
@@ -149,16 +198,37 @@
       align-items: center;
       gap: 12px;
       width: 100%;
-      color: #ff4444;
-      font-size: 0.95rem;
-      font-weight: 600;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #ff4444; // Emergency Red
+      font-size: 0.9rem;
+      font-weight: 700;
       padding: 12px;
       border-radius: 10px;
-      transition: background 0.2s;
+      cursor: pointer;
+      transition: $transition-smooth;
       
       &:hover {
-        background: rgba(255, 68, 68, 0.08);
+        background: rgba(255, 68, 68, 0.05);
+        border-color: rgba(255, 68, 68, 0.2);
+        color: #ff6666;
       }
     }
   }
+}
+
+// --- KEYFRAMES ---
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes pulseBorder {
+  0% { border-color: rgba(255, 46, 46, 0.2); }
+  50% { border-color: rgba(255, 46, 46, 0.8); }
+  100% { border-color: rgba(255, 46, 46, 0.2); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

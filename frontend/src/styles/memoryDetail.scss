@@ -1,5 +1,6 @@
 @import 'variables';
 
+// --- THE NEURAL COMMAND CENTER LAYOUT ---
 .memory-detail-layout {
   display: flex;
   height: 100vh;
@@ -7,50 +8,73 @@
   overflow: hidden;
   background: $bg-main;
 
+  // --- [LEFT SIDE] THE CONTENT VIEWER ---
   .viewer-section {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
     border-right: 1px solid $border-color;
-    overflow-y: auto; // Content below video can scroll
+    overflow-y: auto;
+    background-image: radial-gradient(circle at 0% 0%, rgba(255, 46, 46, 0.03) 0%, transparent 50%);
 
     .viewer-header {
       padding: 20px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
       z-index: 10;
+      position: sticky;
+      top: 0;
+      border-bottom: 1px solid $border-color;
 
       .back-btn {
         display: flex;
         align-items: center;
         gap: 8px;
+        background: transparent;
+        border: none;
         color: $text-dim;
+        font-size: 0.9rem;
         font-weight: 600;
+        cursor: pointer;
         transition: $transition-smooth;
-        &:hover { color: white; transform: translateX(-4px); }
+
+        &:hover {
+          color: $text-bright;
+          transform: translateX(-4px);
+        }
       }
 
       .action-link {
         color: $accent-primary;
-        font-size: 0.85rem;
-        font-weight: 700;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 16px;
+        padding: 10px 18px;
         background: rgba($accent-primary, 0.05);
-        border: 1px solid rgba($accent-primary, 0.1);
-        border-radius: 12px;
-        &:hover { background: rgba($accent-primary, 0.1); }
+        border: 1px solid rgba($accent-primary, 0.2);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: $transition-smooth;
+
+        &:hover {
+          background: rgba($accent-primary, 0.1);
+          border-color: $accent-primary;
+          box-shadow: 0 0 20px rgba(255, 46, 46, 0.2);
+        }
       }
     }
 
     .main-display {
       width: 100%;
-      height: 65vh; // Sets a dominant height for the player
+      height: 65vh; // 🎯 Dominate the top half
       background: #000;
       display: flex;
       align-items: center;
@@ -58,148 +82,339 @@
       position: relative;
       border-bottom: 1px solid $border-color;
 
-      // ✅ THE FULL-SCREEN FIX
-      .video-viewport { 
-        width: 100%; 
-        height: 100%; 
-        iframe { 
-          width: 100%; 
-          height: 100%; 
-          border: none; 
-        } 
-      }
-      
-      .image-viewport { 
+      .video-viewport {
         width: 100%;
         height: 100%;
-        padding: 20px; 
+        iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+      }
+
+      .image-viewport {
+        width: 100%;
+        height: 100%;
+        padding: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
-        img { 
-          max-width: 100%; 
-          max-height: 100%; 
-          border-radius: 12px; 
-          object-fit: contain; 
-        } 
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 12px;
+          object-fit: contain;
+          box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
+          border: 1px solid $border-color;
+        }
       }
-      
+
       .document-viewport {
         width: 100%;
         height: 100%;
-        padding: 40px;
+        padding: 50px;
         display: flex;
         justify-content: center;
         align-items: center;
 
         .doc-glass {
-          background: rgba(255, 255, 255, 0.02);
-          backdrop-filter: blur(20px);
+          background: $glass-bg;
+          backdrop-filter: $glass-blur;
           border: 1px solid $border-color;
-          padding: 40px;
+          padding: 45px;
           border-radius: 24px;
           width: 100%;
-          max-width: 800px;
-          max-height: 80%;
+          max-width: 850px;
+          max-height: 90%;
           display: flex;
           flex-direction: column;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+          box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
 
-          .doc-header { 
-            display: flex; 
-            align-items: center; 
-            gap: 20px; 
-            margin-bottom: 25px; 
-            h2 { font-size: 1.4rem; color: #fff; }
-            p { color: $text-muted; font-size: 0.8rem; font-family: monospace; }
+          .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 35px;
+
+            h2 {
+              font-size: 1.5rem;
+              color: $text-bright;
+              margin: 0;
+              letter-spacing: -0.5px;
+            }
+            p {
+              color: $accent-void;
+              font-size: 0.8rem;
+              font-family: 'JetBrains Mono', monospace;
+              margin: 6px 0 0 0;
+            }
           }
 
-          .doc-content-scroll { 
-            font-size: 1.1rem; 
-            line-height: 1.7; 
-            color: $text-dim; 
+          .doc-content-scroll {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: $text-dim;
             white-space: pre-wrap;
             overflow-y: auto;
+            padding-right: 20px;
+
+            &::-webkit-scrollbar { width: 4px; }
+            &::-webkit-scrollbar-thumb { background: $accent-primary; border-radius: 10px; }
           }
         }
       }
     }
 
     .viewer-footer {
-      padding: 40px 30px;
-      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
+      padding: 50px 40px;
+      background: linear-gradient(to bottom, transparent, rgba(255, 46, 46, 0.03));
 
       .badge-row {
         display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+
         .type-tag {
-          padding: 6px 14px;
-          border-radius: 8px;
+          padding: 8px 16px;
+          border-radius: 6px;
           font-size: 0.7rem;
-          font-weight: 800;
+          font-weight: 900;
+          letter-spacing: 2px;
           display: flex;
           align-items: center;
-          gap: 8px;
-          background: rgba(255,255,255,0.03);
-          &.youtube { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-          &.text { color: $accent-primary; background: rgba($accent-primary, 0.1); }
+          gap: 10px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid $border-color;
+
+          &.youtube {
+            color: $accent-primary;
+            background: rgba(255, 46, 46, 0.1);
+            border-color: rgba(255, 46, 46, 0.3);
+            box-shadow: 0 0 15px rgba(255, 46, 46, 0.1);
+          }
         }
-        .timestamp { color: $text-muted; font-size: 0.85rem; }
+        .timestamp {
+          color: $text-muted;
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
       }
 
-      .detail-title { 
-        font-size: 2.2rem; 
-        font-weight: 800; 
-        margin-bottom: 25px; 
-        color: #fff;
-        line-height: 1.2;
-        letter-spacing: -1px;
+      .detail-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: $text-bright;
+        line-height: 1.1;
+        margin-bottom: 30px;
+        letter-spacing: -1.5px;
       }
 
       .tag-list {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
+
         .detail-tag {
-          color: $accent-primary;
-          background: rgba($accent-primary, 0.05);
-          border: 1px solid rgba($accent-primary, 0.1);
-          padding: 6px 16px;
+          color: $accent-void;
+          background: $bg-card;
+          border: 1px solid $border-color;
+          padding: 8px 20px;
           border-radius: 100px;
           font-size: 0.85rem;
           font-weight: 600;
+          transition: $transition-smooth;
+
+          &:hover {
+            border-color: $accent-primary;
+            color: $accent-primary;
+            transform: scale(1.05);
+          }
         }
       }
     }
   }
 
+  // --- [RIGHT SIDE] THE NEURAL SIDEBAR (SPLIT) ---
   .chat-section {
-    width: 420px;
+    width: 440px;
     height: 100%;
-    background: #080808;
-    border-left: 1px solid $border-color;
+    background: #080808; // Pure void
+    display: flex;
+    flex-direction: column; 
+
+    // 🎯 TOP 45%: NEURAL RECOMMENDATIONS
+    .recommendations-area {
+      height: 45%;
+      border-bottom: 1px solid $border-color;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar { width: 4px; }
+      &::-webkit-scrollbar-thumb { background: rgba(255, 46, 46, 0.4); }
+
+      .rec-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+
+        span {
+          font-size: 0.75rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: $text-bright;
+        }
+      }
+
+      .rec-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .rec-card {
+          display: flex;
+          gap: 14px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid $border-color;
+          border-radius: 14px;
+          padding: 12px;
+          text-decoration: none;
+          transition: $transition-smooth;
+
+          &:hover {
+            background: rgba(255, 46, 46, 0.05);
+            border-color: $accent-primary;
+            transform: translateX(8px);
+            .play-overlay { opacity: 1; }
+          }
+
+          .rec-thumb {
+            width: 120px;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+
+            img { width: 100%; height: 100%; object-fit: cover; }
+
+            .play-overlay {
+              position: absolute;
+              inset: 0;
+              background: rgba(255, 46, 46, 0.3);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              opacity: 0;
+              transition: 0.2s ease;
+            }
+          }
+
+          .rec-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .rec-type {
+              font-size: 0.65rem;
+              font-weight: 900;
+              color: $accent-primary;
+              text-transform: uppercase;
+              margin-bottom: 6px;
+            }
+
+            .rec-title {
+              font-size: 0.8rem;
+              color: $text-bright;
+              font-weight: 600;
+              line-height: 1.4;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+          }
+        }
+      }
+
+      .rec-empty {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $text-muted;
+        font-size: 0.85rem;
+        font-style: italic;
+        border: 1px dashed $border-color;
+        border-radius: 12px;
+        margin: 10px 0;
+      }
+    }
+
+    // 🎯 BOTTOM 55%: CHAT PANEL
+    .chat-area {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: $bg-card;
+
+      // Force ChatPanel to fill the container correctly
+      & > div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
   }
 }
 
-// Global Loading
+// --- GLOBAL LOADING UI ---
 .detail-loading {
   height: 100vh;
+  width: 100%;
+  background: #000;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #000;
-  color: $accent-primary;
+  gap: 30px;
+
   .brain-pulse {
-    width: 60px; height: 60px;
+    width: 70px;
+    height: 70px;
     background: $accent-primary;
     border-radius: 50%;
-    animation: brainPulse 1.5s infinite ease-in-out;
+    box-shadow: 0 0 40px $accent-primary;
+    animation: brainPulse 1.4s infinite ease-in-out;
+  }
+
+  p {
+    color: $accent-primary;
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    animation: fadePulse 2s infinite;
   }
 }
 
+// --- ANIMATIONS ---
 @keyframes brainPulse {
-  0% { transform: scale(0.9); opacity: 0.6; }
-  100% { transform: scale(1.1); opacity: 0; }
+  0% { transform: scale(0.85); opacity: 0.5; box-shadow: 0 0 20px rgba(255, 46, 46, 0.4); }
+  50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 50px rgba(255, 46, 46, 0.8); }
+  100% { transform: scale(0.85); opacity: 0.5; box-shadow: 0 0 20px rgba(255, 46, 46, 0.4); }
+}
+
+@keyframes fadePulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
 }

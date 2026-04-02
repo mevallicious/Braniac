@@ -7,7 +7,6 @@ const ChatPanel = ({ memoryId, onClose }) => {
   const { messages, sendMessage, isTyping } = useChat(memoryId);
   const scrollRef = useRef(null);
 
-
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -25,28 +24,31 @@ const ChatPanel = ({ memoryId, onClose }) => {
     <div className="chat-panel">
       <header className="chat-header">
         <div className="header-info">
-          <Sparkles size={18} className="glow-icon" />
-          <h3>Neural Chat</h3>
+          <Sparkles size={16} className="glow-icon" />
+          <h3>Neural Link</h3>
         </div>
         {onClose && (
           <button className="close-btn" onClick={onClose}>
-            <X size={20} />
+            <X size={18} />
           </button>
         )}
       </header>
 
       <div className="chat-messages" ref={scrollRef}>
-        {messages.length === 0 && (
-          <div className="empty-chat">
-            <Bot size={40} />
-            <p>I've indexed this memory. Ask me anything about its content.</p>
+        
+        {/* 🧠 THE BRAINY GREETING (Always First) */}
+        <div className="message-wrapper ai greeting">
+          <div className="avatar"><Bot size={12} /></div>
+          <div className="message-bubble">
+            Hey! I'm <strong>Brainy</strong>. 🧠 I've indexed this node into your vault. If you have any questions related to the file, just ask me!
           </div>
-        )}
+        </div>
 
+        {/* REAL CONVERSATION HISTORY */}
         {messages.map((msg, index) => (
           <div key={index} className={`message-wrapper ${msg.role}`}>
             <div className="avatar">
-              {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
+              {msg.role === 'user' ? <User size={12} /> : <Bot size={12} />}
             </div>
             <div className="message-bubble">
               {msg.content}
@@ -54,12 +56,13 @@ const ChatPanel = ({ memoryId, onClose }) => {
           </div>
         ))}
 
+        {/* TYPING INDICATOR */}
         {isTyping && (
           <div className="message-wrapper ai">
-            <div className="avatar"><Bot size={14} /></div>
+            <div className="avatar"><Bot size={12} /></div>
             <div className="message-bubble typing">
-              <Loader2 size={16} className="spinner" />
-              <span>Braniac is thinking...</span>
+              <Loader2 size={14} className="spinner" />
+              <span>Brainy is thinking...</span>
             </div>
           </div>
         )}
@@ -68,13 +71,13 @@ const ChatPanel = ({ memoryId, onClose }) => {
       <form className="chat-input-area" onSubmit={handleSend}>
         <input 
           type="text" 
-          placeholder="Ask about this memory..." 
+          placeholder="Ask Brainy something..." 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={isTyping}
         />
         <button type="submit" className="send-btn" disabled={!input.trim() || isTyping}>
-          <Send size={18} />
+          <Send size={16} />
         </button>
       </form>
     </div>

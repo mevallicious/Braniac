@@ -8,14 +8,12 @@ import { useAuth } from '../../hooks/useAuth';
 import { useMemories } from '../../hooks/useMemories';
 
 const Sidebar = () => {
-  // ✅ 1. Just grab the handleLogOut function directly from your hook
   const { handleLogOut } = useAuth();
   
   const { memories, archiveNote } = useMemories(); 
   const [voidText, setVoidText] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // --- 🌌 THE VOID LOGIC ---
   const handleVoidSubmit = async (e) => {
     if (e.key === 'Enter' && voidText.trim() && !e.shiftKey) {
       e.preventDefault();
